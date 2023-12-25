@@ -1,0 +1,5 @@
+instance_type: t2.micro
+keypair_name: gfgkey
+aws_image: ami-0a0f1259dd1c90938
+subnet1: subnet-09cd954372068aad0
+aws_region: ap-south-1

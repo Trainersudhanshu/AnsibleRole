@@ -1,0 +1,32 @@
+    - include_vars:
+        file: ../vars/aws_credential.yml
+    - package:
+        name: python3-pip
+        state: present
+    - pip:
+        name: boto3
+
+    - community.aws.ec2_instance:
+        aws_access_key: "{{ aws_access_key }}"
+        aws_secret_key: "{{ aws_secret_key }}"
+        region: "{{ aws_region }}"
+        key_name: "{{ keypair_name }}"
+        instance_type: "{{ instance_type }}"
+        tags:
+          Name: "ec2launchedbyAnsible"
+          env: "Prod"
+        image_id: "{{ aws_image }}"
+        vpc_subnet_id: "{{ subnet1 }}"
+      register: ec2
+
+    - debug:
+        var: ec2
+
+    - set_fact:
+        private_ip: " {{ ec2['instances'][0]['private_ip_address'] }}"
+
+    - debug:
+        var: private_ip
+    - template:
+        src: inventory_template.j2
+        dest: inventory
